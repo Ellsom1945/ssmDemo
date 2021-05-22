@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ellsom.dao.employeeMapper">
+
+    <!--增加一个Book-->
+    <resultMap id="empMap" type="employee">
+        <result property="name" column="ename"/>
+        <result property="salary" column="sal"/>
+    </resultMap>
+    <insert id="addEmp" parameterType="employee">
+    insert into emp.emp(ename,job,mgr,hiredate,sal,comm,deptno,empno) values
+    (#{name},#{job},#{mgr},#{hireDate},#{salary},#{comm},#{deptNo},#{empNo});
+   </insert>
+    <select id="findAll" resultMap="empMap">
+        select *from emp.emp;
+    </select>
+    <delete id="deleteEmp" parameterType="int">
+        delete from emp.emp where empno=#{no};
+    </delete>
+    <update id="upDateEmp" parameterType="employee">
+        update emp.emp set ename=#{name},mgr=#{mgr},sal=#{salary},comm=#{comm} ,deptNo=#{deptNo} where empno=#{empNo};
+    </update>
+    <select id="findEmp" parameterType="int" resultMap="empMap">
+        select *from emp.emp where empno=#{no};
+    </select>
+    <select id="findMgr" parameterType="int" resultMap="empMap">
+        select *from emp.emp where empno= (select mgr from emp.emp where empno=#{no});
+    </select>
+    <select id="SelectByname" parameterType="String" resultMap="empMap">
+        select *from emp.emp where emp.ename like CONCAT(#{value},'%');
+    </select>
+</mapper>
